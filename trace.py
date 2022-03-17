@@ -69,7 +69,11 @@ class Trace:
 							   21, 26, 24, 34, 29, 30, 26, 36, 31]
 
 		# ali trace, JCT 147 minutes on average
-		self.ali_trace_arrv_pattern = []
+		self.ali_trace_arrv_pattern = [33, 672, 40, 38, 43, 54, 45, 38, 31, 27, 33, 27, 36, 43, 46, 32, 43, 44, 41, 42, 37, 26,
+							   25, 36, 49, 36, 25, 27, 25, 19, 25, 30, 24, 34, 30, 31, 37, 38, 23, 29, 28, 18, 27, 28,
+							   24, 30, 29, 30, 28, 18, 23, 22, 34, 36, 35, 39, 37, 38, 34, 34, 30, 34, 36, 31, 21, 34,
+							   21, 26, 24, 34, 29, 30, 26, 36, 31]
+		##self.ali_trace_arrv_pattern = []
 
 	def _get_pattern(self, max_arrvs_per_ts):
 		if pm.JOB_ARRIVAL_PATTERN == "Uniform":

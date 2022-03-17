@@ -1,3 +1,5 @@
+#! python2
+# -*- coding: UTF-8 -*-
 import time
 import numpy as np
 import multiprocessing
@@ -216,7 +218,7 @@ def log_config(tb_logger):
 	f.write(train_config_str)
 	f.close()
 
-	f = open(LOG_DIR + "config.md", 'w')
+	f = open(LOG_DIR + "config.md", mode='w')
 	f.write(train_config_str)
 	f.close()
 
@@ -511,6 +513,7 @@ def rl_agent(net_weights_q, net_gradients_q, stats_q, id):
 		np.random.seed(pm.np_seed+id+1)
 
 	config = tf.ConfigProto()
+	config = tf.ConfigProto(allow_soft_placement=True)
 	config.gpu_options.allow_growth = True
 	with tf.Session(config=config) as sess, tf.device("/gpu:"+str(id%2)):
 		policy_net = network.PolicyNetwork(sess, "policy_net", pm.TRAINING_MODE, logger)
@@ -733,6 +736,8 @@ def rl_agent(net_weights_q, net_gradients_q, stats_q, id):
 					logger.info(str(num_jobs) + " \t" + " \t" + " " + '%.3f' %jct + " \t\t" + " " + '%.3f' %makespan \
 								+ "\t\t" + " " + '%.3f' %reward + "\t" + " " + '%.3f' % (toc - tic))
 
+def func():
+	return os.system("cd " + pm.SUMMARY_DIR + " && rm -rf *; tensorboard --logdir=./")
 
 def main():
 	os.system("rm -f *.log")
@@ -745,7 +750,8 @@ def main():
 	os.system("mkdir -p " + pm.MODEL_DIR + "; mkdir -p " + pm.SUMMARY_DIR)
 	if pm.EXPERIMENT_NAME is None:
 		cmd = "cd " + pm.SUMMARY_DIR + " && rm -rf *; tensorboard --logdir=./"
-		board = multiprocessing.Process(target=lambda: os.system(cmd), args=())
+		# board = multiprocessing.Process(target=lambda: os.system(cmd), args=())
+		board = multiprocessing.Process(target=func, args=())
 		board.start()
 		time.sleep(3) # let tensorboard start first since it will clear the dir
 
